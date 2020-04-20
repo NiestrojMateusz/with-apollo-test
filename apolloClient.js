@@ -1,7 +1,19 @@
-import { ApolloClient } from 'apollo-client'
-import { InMemoryCache } from 'apollo-cache-inmemory'
-import { HttpLink } from 'apollo-link-http'
-import fetch from 'isomorphic-unfetch'
+import { ApolloClient } from 'apollo-client';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { HttpLink } from 'apollo-link-http';
+import fetch from 'isomorphic-unfetch';
+import { CONFIG_QUERY } from './components/ConfigProvider';
+import gql from 'graphql-tag';
+
+const typeDefs = gql`
+  extend type Query {
+    config: Config
+  }
+
+  extend type Config {
+    first: Int!
+  }
+`;
 
 export default function createApolloClient(initialState, ctx) {
   // The `ctx` (NextPageContext) will only be present on the server.
@@ -14,5 +26,7 @@ export default function createApolloClient(initialState, ctx) {
       fetch,
     }),
     cache: new InMemoryCache().restore(initialState),
-  })
+    typeDefs,
+    resolvers: {},
+  });
 }

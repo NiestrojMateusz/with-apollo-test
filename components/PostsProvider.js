@@ -20,20 +20,13 @@ export const ALL_POSTS_QUERY = gql`
 `;
 export const allPostsQueryVars = {
   skip: 0,
-  first: 10,
 };
 
-export const PostsProvider = ({ children }) => {
+export const PostsProvider = ({ children, config }) => {
   const { data, loading } = useQuery(ALL_POSTS_QUERY, {
-    variables: allPostsQueryVars,
-    // Setting this value to true will make the component rerender when
-    // the "networkStatus" changes, so we are able to know if it is fetching
-    // more data
-    notifyOnNetworkStatusChange: true,
+    variables: { ...allPostsQueryVars, first: config.first },
   });
 
-  console.log('loading', loading);
-  // console.log('data', data);
   const allPosts = data ? data.allPosts : [];
   return (
     <PostsContext.Provider value={allPosts}>{children}</PostsContext.Provider>
