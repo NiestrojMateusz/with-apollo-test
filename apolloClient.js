@@ -16,6 +16,16 @@ const typeDefs = gql`
 `;
 
 export default function createApolloClient(initialState, ctx) {
+  console.log('initialState', initialState);
+  const cache = new InMemoryCache().restore(initialState);
+  cache.writeData({
+    data: {
+      config: {
+        first: 10,
+        __typename: 'CONFIG',
+      },
+    },
+  });
   // The `ctx` (NextPageContext) will only be present on the server.
   // use it to extract auth headers (ctx.req) or similar.
   return new ApolloClient({
@@ -25,7 +35,7 @@ export default function createApolloClient(initialState, ctx) {
       credentials: 'same-origin', // Additional fetch() options like `credentials` or `headers`
       fetch,
     }),
-    cache: new InMemoryCache().restore(initialState),
+    cache,
     typeDefs,
     resolvers: {},
   });

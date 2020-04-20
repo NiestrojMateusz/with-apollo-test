@@ -17,7 +17,7 @@ export const ConfigProvider = ({ children }) => {
 
   console.log('loading', loading);
   // console.log('data', data);
-  const config = data ? data.config : { first: 3 };
+  const config = data ? data.config : {};
   return (
     <ConfigContext.Provider value={config}>{children}</ConfigContext.Provider>
   );
